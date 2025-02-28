@@ -1,10 +1,10 @@
 # ignore non-default live2d models
-/live2d-models/*
-!/live2d-models/mao_pro
-!/live2d-models/shizuku
+# /live2d-models/*
+# !/live2d-models/mao_pro
+# !/live2d-models/shizuku
 
 # ignore non-default character configs
-/character-configs/*
+# /character-configs/*
 # but all of the defaults are already tracked, so no need to un-ignore them
 
 
