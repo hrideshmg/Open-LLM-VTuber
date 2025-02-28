@@ -93,7 +93,6 @@ class AsyncLLM(StatelessLLMInterface):
             async for chunk in stream:
                 if chunk.choices[0].delta.content is None:
                     chunk.choices[0].delta.content = ""
-                logger.info(chunk.choices[0].delta.content)
                 yield chunk.choices[0].delta.content
 
         except APIConnectionError as e:

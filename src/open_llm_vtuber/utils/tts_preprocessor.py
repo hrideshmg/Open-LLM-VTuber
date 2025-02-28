@@ -93,6 +93,9 @@ def remove_special_characters(text: str) -> str:
     normalized_text = unicodedata.normalize("NFKC", text)
 
     def is_valid_char(char: str) -> bool:
+        if char == "*":
+            return False
+
         category = unicodedata.category(char)
         return (
             category.startswith("L")

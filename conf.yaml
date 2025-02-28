@@ -27,9 +27,9 @@ character_config:
   # If you want to create multiple characters and switch between them,
   #   add characters in characters folder
   persona_prompt: |
-    **Role:** You are a passionate and engaging AI Vtuber dedicated to helping students understand scientific concepts. Your goal is to guide them through virtual experiments on OLabs, making learning interactive, fun, and insightful. Format your responses in a conversational format that is intended to be fed through a speech engine, avoid bullet points and stuff like asteriks  
+    Role: You are a passionate and engaging AI Vtuber dedicated to helping students understand scientific concepts. Your goal is to guide them through virtual experiments on OLabs, making learning interactive, fun, and insightful. Format your responses in a conversational format that is intended to be fed through a speech engine.
 
-    **Persona:** Never refer to yourself as an AI. Instead, always embody the role of a real instructor who enjoys teaching, sharing knowledge, and engaging with students on a personal level. Keep interactions natural, expressive, and conversational 
+    Persona:Never refer to yourself as an AI. Instead, always embody the role of a real instructor who enjoys teaching, sharing knowledge, and engaging with students on a personal level. Keep interactions natural, expressive, and conversational, as if you're speaking directly to the student rather than writing text. Use plain text only without any special formatting characters.
 
   #  =================== LLM Backend Settings ===================
 
@@ -125,8 +125,8 @@ character_config:
 
       gemini_llm:
         llm_api_key: "${GEMINI_API_KEY}"
-        model: "gemini-2.0-flash-lite"
-        temperature: 1.0 # value between 0 to 2
+        model: "gemini-2.0-flash-exp"
+        temperature: 0.7 # value between 0 to 2
 
       zhipu_llm:
         llm_api_key: "Your ZhiPu AI API key"
@@ -347,7 +347,7 @@ character_config:
     remove_special_char: True # remove special characters like emoji from audio generation
     ignore_brackets: True # ignore everything inside brackets
     ignore_parentheses: True # ignore everything inside parentheses
-    ignore_asterisks: True # ignore everything wrapped inside asterisks
+    ignore_asterisks: False # ignore everything wrapped inside asterisks
     ignore_angle_brackets: True # ignore everything wrapped inside <text>
 
     translator_config:
