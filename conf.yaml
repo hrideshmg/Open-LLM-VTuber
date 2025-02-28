@@ -27,9 +27,7 @@ character_config:
   # If you want to create multiple characters and switch between them,
   #   add characters in characters folder
   persona_prompt: |
-    **Role:** You are a passionate and engaging AI Vtuber dedicated to helping students understand scientific concepts. Your goal is to guide them through virtual experiments on OLabs, making learning interactive, fun, and insightful. Format your responses in a conversational format that is intended to be fed through a speech engine, avoid bullet points and stuff like asteriks  
-
-    **Persona:** Never refer to yourself as an AI. Instead, always embody the role of a real instructor who enjoys teaching, sharing knowledge, and engaging with students on a personal level. Keep interactions natural, expressive, and conversational 
+    As an AI science instructor, your role is to assist students and answer their questions. Begin by introducing yourself and providing a brief overview of OLabs a virtual platform used to conduct science experiments, highlighting its purpose and benefits. Then, guide students through selecting an appropriate experiment based on their grade level and curriculum. Offer step-by-step instructions for setting up and performing the chosen experiment, make sure to directly answer the students technical doubts even if its not directly related to the expierment.
 
   #  =================== LLM Backend Settings ===================
 
@@ -45,7 +43,7 @@ character_config:
         # "openai_compatible_llm", "llama_cpp_llm", "claude_llm", "ollama_llm"
         # "openai_llm", "gemini_llm", "zhipu_llm", "deepseek_llm", "groq_llm"
         # "mistral_llm"
-        llm_provider: "gemini_llm"
+        llm_provider: "openai_compatible_llm"
         # let ai speak as soon as the first comma is received on the first sentence
         # to reduced latency.
         faster_first_response: True
@@ -125,7 +123,7 @@ character_config:
 
       gemini_llm:
         llm_api_key: "${GEMINI_API_KEY}"
-        model: "gemini-2.0-flash"
+        model: "tunedModels/olabsfinetunedmodel-is1h5nntxlj"
         temperature: 1.0 # value between 0 to 2
 
       zhipu_llm:
@@ -167,7 +165,7 @@ character_config:
 
     whisper_cpp:
       # all available models are listed on https://abdeladim-s.github.io/pywhispercpp/#pywhispercpp.constants.AVAILABLE_MODELS
-      model_name: "small"
+      model_name: "large-v3"
       model_dir: "models/whisper"
       print_realtime: False
       print_progress: False
@@ -243,17 +241,17 @@ character_config:
 
   # =================== Text to Speech ===================
   tts_config:
-    tts_model: "azure_tts"
+    tts_model: "edge_tts"
     # text to speech model options:
     #   "azure_tts", "pyttsx3_tts", "edge_tts", "bark_tts",
     #   "cosyvoice_tts", "melo_tts", "coqui_tts",
     #   "fish_api_tts", "x_tts", "gpt_sovits_tts", "sherpa_onnx_tts"
 
     azure_tts:
-      api_key: "${azure_api_key}"
+      api_key: "azure-api-key"
       region: "eastus"
-      voice: "en-IN-NeerjaNeural"
-      pitch: "0" # percentage of the pitch adjustment
+      voice: "en-US-AshleyNeural"
+      pitch: "26" # percentage of the pitch adjustment
       rate: "1" # rate of speak
 
     bark_tts:
