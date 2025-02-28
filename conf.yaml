@@ -243,17 +243,17 @@ character_config:
 
   # =================== Text to Speech ===================
   tts_config:
-    tts_model: "edge_tts"
+    tts_model: "azure_tts"
     # text to speech model options:
     #   "azure_tts", "pyttsx3_tts", "edge_tts", "bark_tts",
     #   "cosyvoice_tts", "melo_tts", "coqui_tts",
     #   "fish_api_tts", "x_tts", "gpt_sovits_tts", "sherpa_onnx_tts"
 
     azure_tts:
-      api_key: "azure-api-key"
+      api_key: "${azure_api_key}"
       region: "eastus"
-      voice: "en-US-AshleyNeural"
-      pitch: "26" # percentage of the pitch adjustment
+      voice: "en-IN-NeerjaNeural"
+      pitch: "0" # percentage of the pitch adjustment
       rate: "1" # rate of speak
 
     bark_tts:
