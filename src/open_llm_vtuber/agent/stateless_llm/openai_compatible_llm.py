@@ -75,7 +75,6 @@ class AsyncLLM(StatelessLLMInterface):
         try:
             # If system prompt is provided, add it to the messages
             messages_with_system = messages
-            logger.info(messages)
             if system:
                 messages_with_system = [
                     {"role": "system", "content": system},

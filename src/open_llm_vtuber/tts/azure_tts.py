@@ -3,6 +3,7 @@ import os
 import azure.cognitiveservices.speech as speechsdk
 from loguru import logger
 from .tts_interface import TTSInterface
+from src.open_llm_vtuber.global_config import Config
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(current_dir)
@@ -29,8 +30,6 @@ class TTSEngine(TTSInterface):
         """
         # This example requires environment variables named "SPEECH_KEY" and "SPEECH_REGION"
         self.speech_config = speechsdk.SpeechConfig(subscription=api_key, region=region)
-        # The language of the voice that speaks.
-        self.speech_config.speech_synthesis_voice_name = voice
 
         # Initialize pitch and rate
         self.pitch = pitch
@@ -80,8 +79,19 @@ class TTSEngine(TTSInterface):
         on_speak_end_callback: function
             the callback function to call when synthesis ends
         """
+        # The language of the voice that speaks.
+
+        global_conf = Config.get_instance()
+        match global_conf.current_language:
+            case "en-US":
+                self.speech_config.speech_synthesis_voice_name = "en-IN-NeerjaNeural"
+            case "hi-IN":
+                self.speech_config.speech_synthesis_voice_name = "hi-IN-AartiNeural"
+            case "ml-IN":
+                self.speech_config.speech_synthesis_voice_name = "ml-IN-SobhanaNeural"
         speech_synthesizer = speechsdk.SpeechSynthesizer(
-            speech_config=self.speech_config, audio_config=audio_config
+            speech_config=self.speech_config,
+            audio_config=audio_config,
         )
 
         # check if the text is empty or not a string

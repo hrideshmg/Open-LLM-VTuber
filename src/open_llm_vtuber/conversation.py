@@ -198,9 +198,10 @@ async def conversation_chain(
                         tts_text = translate_engine.translate(tts_text)
                         logger.info(f"🏃 Text after translation '''{tts_text}'''...")
                     else:
-                        logger.info(
-                            "🚫 No translation engine available. Skipping translation."
-                        )
+                        pass
+                        # logger.info(
+                        #     "🚫 No translation engine available. Skipping translation."
+                        # )
                     full_response += display_text
                     await tts_manager.speak(
                         tts_text=tts_text,

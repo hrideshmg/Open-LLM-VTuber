@@ -252,7 +252,7 @@ character_config:
     azure_tts:
       api_key: "${AZURE_API_KEY}"
       region: "centralindia"
-      voice: "ml-IN-SobhanaNeural"
+      voice: "en-IN-NeerjaNeural"
       pitch: "0" # percentage of the pitch adjustment
       rate: "1" # rate of speak
 

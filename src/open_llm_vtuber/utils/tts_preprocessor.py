@@ -83,29 +83,39 @@ def tts_filter(
 def remove_special_characters(text: str) -> str:
     """
     Filter text to remove all non-letter, non-number, and non-punctuation characters.
-
-    Args:
-        text (str): The text to filter.
-
-    Returns:
-        str: The filtered text.
+    Special handling for Malayalam text.
     """
-    normalized_text = unicodedata.normalize("NFKC", text)
+    # Use NFD normalization for better handling of Malayalam combining characters
+    normalized_text = unicodedata.normalize("NFD", text)
 
     def is_valid_char(char: str) -> bool:
         if char == "*":
             return False
 
         category = unicodedata.category(char)
+        # Include Malayalam specific categories
         return (
-            category.startswith("L")
-            or category.startswith("N")
-            or category.startswith("P")
+            category.startswith("L")  # Letters
+            or category.startswith("N")  # Numbers
+            or category.startswith("P")  # Punctuation
             or char.isspace()
+            # Malayalam Unicode range
+            or ('\u0D00' <= char <= '\u0D7F')
+            # Malayalam numbers range
+            or ('\u0D66' <= char <= '\u0D6F')
+            # Hindi Unicode range (Devanagari)
+            or ('\u0900' <= char <= '\u097F')
+            # Hindi numbers range
+            or ('\u0966' <= char <= '\u096F')
+            # Extended Devanagari
+            or ('\uA8E0' <= char <= '\uA8FF')
+            # Devanagari Extended
+            or ('\u11B00' <= char <= '\u11B4F')
         )
 
     filtered_text = "".join(char for char in normalized_text if is_valid_char(char))
-    return filtered_text
+    # Final normalization to compose characters
+    return unicodedata.normalize("NFC", filtered_text)
 
 
 def _filter_nested(text: str, left: str, right: str) -> str:

@@ -5,6 +5,7 @@ from loguru import logger
 import azure.cognitiveservices.speech as speechsdk
 from azure.cognitiveservices.speech.audio import AudioConfig
 from .asr_interface import ASRInterface
+from src.open_llm_vtuber.global_config import Config
 
 CACHE_DIR = os.path.join(os.path.dirname(__file__), "cache")
 
@@ -76,7 +77,12 @@ class VoiceRecognition(ASRInterface):
         result = speech_recognizer.recognize_once()
 
         if result.reason == speechsdk.ResultReason.RecognizedSpeech:
-            logger.info(f"Recognized: {result.text}")
+            auto_detect_result = speechsdk.AutoDetectSourceLanguageResult(result)
+            logger.info(f"Recognized language: {auto_detect_result.language}")
+
+            config = Config.get_instance()
+            config.current_language = auto_detect_result.language
+
             return result.text
         elif result.reason == speechsdk.ResultReason.NoMatch:
             logger.warning("No speech could be recognized")
