@@ -154,7 +154,7 @@ character_config:
     asr_model: "sherpa_onnx_asr"
 
     azure_asr:
-      api_key: "azure_api_key"
+      api_key: "AZURE_API_KEY"
       region: "eastus"
 
     # Faster whisper config
