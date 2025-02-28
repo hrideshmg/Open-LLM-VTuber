@@ -7,6 +7,7 @@ import os
 import re
 import chardet
 from loguru import logger
+from dotenv import load_dotenv
 
 from .main import Config
 
@@ -28,6 +29,7 @@ def read_yaml(config_path: str) -> Dict[str, Any]:
         FileNotFoundError: If the configuration file is not found.
         IOError: If the configuration file cannot be read.
     """
+    load_dotenv()
 
     if not os.path.exists(config_path):
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
@@ -144,11 +146,11 @@ def scan_config_alts_directory(config_alts_dir: str) -> list[dict]:
     config_files.append(
         {
             "filename": "conf.yaml",
-            "name": default_config.get("character_config", {}).get(
-                "conf_name", "conf.yaml"
-            )
-            if default_config
-            else "conf.yaml",
+            "name": (
+                default_config.get("character_config", {}).get("conf_name", "conf.yaml")
+                if default_config
+                else "conf.yaml"
+            ),
         }
     )
 
@@ -160,11 +162,11 @@ def scan_config_alts_directory(config_alts_dir: str) -> list[dict]:
                 config_files.append(
                     {
                         "filename": file,
-                        "name": config.get("character_config", {}).get(
-                            "conf_name", file
-                        )
-                        if config
-                        else file,
+                        "name": (
+                            config.get("character_config", {}).get("conf_name", file)
+                            if config
+                            else file
+                        ),
                     }
                 )
     logger.debug(f"Found config files: {config_files}")
