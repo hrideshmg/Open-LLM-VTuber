@@ -151,19 +151,19 @@ character_config:
   # === Automatic Speech Recognition ===
   asr_config:
     # speech to text model options: "faster_whisper", "whisper_cpp", "whisper", "azure_asr", "fun_asr", "groq_whisper_asr", "sherpa_onnx_asr"
-    asr_model: "sherpa_onnx_asr"
+    asr_model: "azure_asr"
 
     azure_asr:
-      api_key: "AZURE_API_KEY"
-      region: "eastus"
+      api_key: "${AZURE_API_KEY}"
+      region: "centralindia"
 
     # Faster whisper config
     faster_whisper:
-      model_path: "distil-medium.en" # distil-medium.en is an English-only model
+      model_path: "medium" # distil-medium.en is an English-only model
       #                               use distil-large-v3 if you have a good GPU
       download_root: "models/whisper"
-      language: "en" # en, zh, or something else. put nothing for auto-detect.
-      device: "auto" # cpu, cuda, or auto. faster-whisper doesn't support mps
+      language: "" # en, zh, or something else. put nothing for auto-detect.
+      device: "cuda" # cpu, cuda, or auto. faster-whisper doesn't support mps
 
     whisper_cpp:
       # all available models are listed on https://abdeladim-s.github.io/pywhispercpp/#pywhispercpp.constants.AVAILABLE_MODELS
@@ -251,8 +251,8 @@ character_config:
 
     azure_tts:
       api_key: "${AZURE_API_KEY}"
-      region: "eastus"
-      voice: "en-IN-NeerjaNeural"
+      region: "centralindia"
+      voice: "ml-IN-SobhanaNeural"
       pitch: "0" # percentage of the pitch adjustment
       rate: "1" # rate of speak
 

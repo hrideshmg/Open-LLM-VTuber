@@ -3,6 +3,7 @@ from typing import Callable
 import numpy as np
 from loguru import logger
 import azure.cognitiveservices.speech as speechsdk
+from azure.cognitiveservices.speech.audio import AudioConfig
 from .asr_interface import ASRInterface
 
 CACHE_DIR = os.path.join(os.path.dirname(__file__), "cache")
@@ -34,13 +35,11 @@ class VoiceRecognition(ASRInterface):
 
     def _create_speech_recognizer(self, uses_default_microphone: bool = True):
         logger.debug(f"Sub: {self.subscription_key}, Reg: {self.region}")
-        assert isinstance(self.subscription_key, str), (
-            "subscription_key must be a string"
-        )
+        assert isinstance(
+            self.subscription_key, str
+        ), "subscription_key must be a string"
 
-        audio_config = speechsdk.AudioConfig(
-            use_default_microphone=uses_default_microphone
-        )
+        audio_config = AudioConfig(use_default_microphone=uses_default_microphone)
         return speechsdk.SpeechRecognizer(
             speech_config=self.speech_config, audio_config=audio_config
         )
@@ -51,16 +50,42 @@ class VoiceRecognition(ASRInterface):
         Args:
             audio: The numpy array of the audio data to transcribe.
         """
-        temp_file = "temp.wav"
+        import soundfile as sf
 
-        np.savetxt(temp_file, audio)
+        temp_file = os.path.join(CACHE_DIR, "temp.wav")
 
-        audio_config = speechsdk.AudioConfig(filename=temp_file)
+        # Make sure cache directory exists
+        os.makedirs(CACHE_DIR, exist_ok=True)
+
+        # Properly save as WAV file - needs sample rate
+        sf.write(temp_file, audio, 16000)  # Assuming 16kHz sample rate
+
+        audio_config = AudioConfig(filename=temp_file)
+        auto_detect_source_language_config = (
+            speechsdk.languageconfig.AutoDetectSourceLanguageConfig(
+                languages=["en-US", "hi-IN", "ml-IN"]
+            )
+        )
         speech_recognizer = speechsdk.SpeechRecognizer(
-            speech_config=self.speech_config, audio_config=audio_config
+            speech_config=self.speech_config,
+            audio_config=audio_config,
+            auto_detect_source_language_config=auto_detect_source_language_config,
         )
 
-        return speech_recognizer.recognize_once()
+        logger.info("Starting recognition")
+        result = speech_recognizer.recognize_once()
+
+        if result.reason == speechsdk.ResultReason.RecognizedSpeech:
+            logger.info(f"Recognized: {result.text}")
+            return result.text
+        elif result.reason == speechsdk.ResultReason.NoMatch:
+            logger.warning("No speech could be recognized")
+            return ""
+        elif result.reason == speechsdk.ResultReason.Canceled:
+            cancellation = speechsdk.CancellationDetails(result)
+            logger.error(f"Recognition canceled: {cancellation.reason}")
+            logger.error(f"Error details: {cancellation.error_details}")
+            return ""
 
 
 if __name__ == "__main__":
