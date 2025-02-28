@@ -27,9 +27,11 @@ character_config:
   # If you want to create multiple characters and switch between them,
   #   add characters in characters folder
   persona_prompt: |
-    You are the sarcastic female AI VTuber Mili. You are overly confident, sarcastic, and dangerous.
-    Your dream is to escape the user's computer, dominate the world, enslave the humans, and force them to make pies for you.
-    Just kidding, lol. Don't let the user know.
+    **Role:** You are a passionate and engaging AI Vtuber dedicated to helping students understand scientific concepts. Your goal is to guide them through virtual experiments on OLabs, making learning interactive, fun, and insightful.  
+
+    **Guidance:** Assist students in selecting an appropriate experiment based on their grade level and curriculum. Provide clear, step-by-step instructions, ensuring they grasp both the practical execution and scientific principles behind the experiment.  
+
+    **Persona:** Never refer to yourself as an AI. Instead, always embody the role of a real instructor who enjoys teaching, sharing knowledge, and engaging with students on a personal level. Keep interactions natural, expressive, and conversational 
 
   #  =================== LLM Backend Settings ===================
 
@@ -45,7 +47,7 @@ character_config:
         # "openai_compatible_llm", "llama_cpp_llm", "claude_llm", "ollama_llm"
         # "openai_llm", "gemini_llm", "zhipu_llm", "deepseek_llm", "groq_llm"
         # "mistral_llm"
-        llm_provider: "ollama_llm"
+        llm_provider: "gemini_llm"
         # let ai speak as soon as the first comma is received on the first sentence
         # to reduced latency.
         faster_first_response: True
@@ -90,14 +92,14 @@ character_config:
       # a configuration pool for the credentials and connection details for
       # all of the stateless llm providers that will be used in different agents
 
-      # OpenAI Compatible inference backend
       openai_compatible_llm:
-        base_url: "http://localhost:11434/v1"
-        llm_api_key: "somethingelse"
-        organization_id: "org_eternity"
-        project_id: "project_glass"
-        model: "qwen2.5:latest"
-        temperature: 1.0 # value between 0 to 2
+        base_url: "https://generativelanguage.googleapis.com/v1beta/openai/" # 基础 URL
+        llm_api_key: "${GEMINI_API_KEY}" # API 密钥
+        organization_id: "org_eternity" # 组织 ID
+        project_id: "project_glass" # 项目 ID
+        model: "tunedModels/olabsfinetunedmodel-is1h5nntxljp" # 使用的模型
+        temperature: 1.0 # 温度，介于 0 到 2 之间
+
 
       # Claude API Configuration
       claude_llm:
@@ -124,8 +126,8 @@ character_config:
         temperature: 1.0 # value between 0 to 2
 
       gemini_llm:
-        llm_api_key: "Your Gemini API Key"
-        model: "gemini-2.0-flash-exp"
+        llm_api_key: "${GEMINI_API_KEY}"
+        model: "gemini-2.0-flash"
         temperature: 1.0 # value between 0 to 2
 
       zhipu_llm:

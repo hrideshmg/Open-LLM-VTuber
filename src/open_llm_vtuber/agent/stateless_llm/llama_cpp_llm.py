@@ -69,6 +69,7 @@ class LLM(StatelessLLMInterface):
                 if chunk.get("choices") and chunk["choices"][0].get("delta"):
                     content = chunk["choices"][0]["delta"].get("content", "")
                     if content:
+                        print(content)
                         yield content
 
         except Exception as e:

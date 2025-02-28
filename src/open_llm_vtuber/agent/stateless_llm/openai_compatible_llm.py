@@ -75,23 +75,25 @@ class AsyncLLM(StatelessLLMInterface):
         try:
             # If system prompt is provided, add it to the messages
             messages_with_system = messages
+            logger.info(messages)
             if system:
                 messages_with_system = [
                     {"role": "system", "content": system},
                     *messages,
                 ]
 
-            stream: AsyncStream[
-                ChatCompletionChunk
-            ] = await self.client.chat.completions.create(
-                messages=messages_with_system,
-                model=self.model,
-                stream=True,
-                temperature=self.temperature,
+            stream: AsyncStream[ChatCompletionChunk] = (
+                await self.client.chat.completions.create(
+                    messages=messages_with_system,
+                    model=self.model,
+                    stream=True,
+                    temperature=self.temperature,
+                )
             )
             async for chunk in stream:
                 if chunk.choices[0].delta.content is None:
                     chunk.choices[0].delta.content = ""
+                logger.info(chunk.choices[0].delta.content)
                 yield chunk.choices[0].delta.content
 
         except APIConnectionError as e:
