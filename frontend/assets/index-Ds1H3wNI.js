@@ -38912,7 +38912,7 @@ function VADProvider({ children }) {
     if (aiStateRef.current === "interrupted" || aiStateRef.current === "listening") {
       setAiStateRef.current("idle");
     }
-    setSubtitleTextRef.current("The LLM can't hear you.");
+    setSubtitleTextRef.current("Vidya can't hear you.");
   }, []);
   const updateSettings = reactExports.useCallback((newSettings) => {
     setSettings(newSettings);
