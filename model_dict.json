@@ -165,7 +165,7 @@
     "url": "/live2d-models/haru_greeter/haru_greeter_t05.model3.json",
     "kScale": 0.5,
     "initialXshift": 0,
-    "initialYshift": 0,
+    "initialYshift": 300,
     "idleMotionGroupName": "idle",
     "emotionMap": {
       "neutral": 0,
@@ -179,4 +179,3 @@
     }
   }
 ]
-
