@@ -1,5 +1,8 @@
 # Vidya-Backend
 Backend for Vidya online virtual teacher designed for Olabs platform.
+Main repo: https://github.com/ItsAbhinavM/Vidya.git
+Frontend build repo: https://github.com/hrideshmg/vidya-backend.git
+
 
 ## 🚀 Quick Start
 
