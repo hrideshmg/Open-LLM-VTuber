@@ -3,6 +3,7 @@ import json
 import uuid
 from datetime import datetime
 from typing import AsyncIterator, List, Dict, Union, Any
+import re
 
 import numpy as np
 from fastapi import WebSocket
@@ -161,6 +162,18 @@ async def conversation_chain(
             await websocket_send(
                 json.dumps({"type": "user-input-transcription", "text": input_text})
             )
+
+        # Check for URLs in user input
+        # urls = re.findall(r'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+[^\s]*', input_text)
+        # for url in urls:
+        if "google" in input_text.lower():
+            await websocket_send(
+                json.dumps({
+                    "type": "navigate",
+                    "url": "https://www.google.com"
+                })
+            )
+            logger.info(f"Detected URL in user input, sending to frontend: {url}")
 
         # Prepare BatchInput
         batch_input = BatchInput(
