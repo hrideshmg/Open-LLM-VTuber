@@ -163,17 +163,47 @@ async def conversation_chain(
                 json.dumps({"type": "user-input-transcription", "text": input_text})
             )
 
-        # Check for URLs in user input
-        # urls = re.findall(r'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+[^\s]*', input_text)
-        # for url in urls:
-        if "google" in input_text.lower():
-            await websocket_send(
-                json.dumps({
-                    "type": "navigate",
-                    "url": "https://www.google.com"
-                })
-            )
-            logger.info(f"Detected URL in user input, sending to frontend: {url}")
+        # Check for experiment names in user input
+        if "open" in input_text.lower():
+            try:
+                with open("olabs_experiments.json", "r") as f:
+                    data = json.load(f)
+                    copy_text = re.sub(r"[^a-zA-Z\s]", "", input_text)
+                    logger.info(f"Open keyword detected, cleaned up input: {copy_text}")
+
+                    copy_text = set(copy_text.lower().split())
+
+                    # Store matches with their scores
+                    matches = []
+                    for item in data:
+                        # Split experiment name into words and convert to lowercase
+                        name_words = set(item["name"].lower().split())
+
+                        # Count matching words using set intersection
+                        matching_words = name_words & copy_text
+                        if matching_words:  # If there are any matches
+                            matches.append(
+                                {
+                                    "name": item["name"],
+                                    "link": item["link"],
+                                    "score": len(matching_words),
+                                }
+                            )
+
+                    # Sort matches by score in descending order
+                    matches.sort(key=lambda x: x["score"], reverse=True)
+
+                    # Send the best match if any found
+                    if matches:
+                        best_match = matches[0]
+                        await websocket_send(
+                            json.dumps({"type": "navigate", "url": best_match["link"]})
+                        )
+                        logger.info(
+                            f"Best matching experiment '{best_match['name']}' (score: {best_match['score']}) in user input, sending URL to frontend: {best_match['link']}"
+                        )
+            except Exception as e:
+                logger.error(f"Error checking for experiment links: {e}")
 
         # Prepare BatchInput
         batch_input = BatchInput(

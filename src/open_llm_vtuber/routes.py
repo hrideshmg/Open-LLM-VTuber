@@ -1,7 +1,7 @@
 import json
 import asyncio
 import numpy as np
-from fastapi import APIRouter, WebSocket
+from fastapi import APIRouter, WebSocket, Request
 from starlette.websockets import WebSocketDisconnect
 from loguru import logger
 from .conversation import conversation_chain
@@ -18,6 +18,7 @@ from .chat_history_manager import (
     delete_history,
     get_history_list,
 )
+from fastapi.responses import JSONResponse
 
 
 def create_routes(default_context_cache: ServiceContext):
@@ -262,5 +263,28 @@ def create_routes(default_context_cache: ServiceContext):
 
         except WebSocketDisconnect:
             connected_clients.remove(websocket)
+
+    @router.post("/api/message")
+    async def handle_message(request: Request):
+        try:
+            # Parse the JSON body
+            data = await request.json()
+            print(data)
+            
+            # Validate required fields
+
+            return JSONResponse(
+                content={
+                    "status": "success",
+                    "response": "hi"
+                }
+            )
+
+        except Exception as e:
+            logger.error(f"Error processing message: {e}")
+            return JSONResponse(
+                status_code=500,
+                content={"error": f"Internal server error: {str(e)}"}
+            )
 
     return router
